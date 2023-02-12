@@ -1,0 +1,114 @@
+<!-- <section class="container"> -->
+
+<!-- <seccion class="vh-100 d-flex mt-3 justify-content-left">
+  <div>Hola</div>
+</seccion> -->
+
+<aside class="bd-sidebar">
+  
+  <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar" aria-labelledby="bdSidebarOffcanvasLabel">
+    
+    <div class="container pt-3 ">
+      <h5 class="border-bottom pb-2 mb-4" style="font-weight: 500;">
+        Panel Evaluación <span class="badge bg-secondary">Lec</span>
+      </h5>
+    </div>
+
+    <div class="container  vh-100 d-felx justify-content-left ">
+
+      <div id="userform">
+
+        <div class="form-group">
+          <label for="item-category">Evaluador</label>
+          <select class="form-control" id="item-category">
+            </select>
+        </div>
+
+        <div class="form-group pt-2">
+          <label for="item-Name">Estado</label>
+          <select class="form-control" id="item-Name" >
+            </select>
+        </div>
+
+        <div class="form-group pt-2">
+          <label for="item-type">Empresa</label>
+          <select class="form-control" id="item-type">
+            </select>
+        </div>
+
+        <div class="form-group pt-2">
+          <label for="expediente-type">Expediente</label>
+          <select class="form-control" id="expediente-type">
+            </select>
+        </div>
+
+
+        <div class="form-group pt-2">
+          <label for="comentarios" class="form-label">Cambiar Estado</label>
+          <select class="form-select" id="comentarios"></select>
+          <div class="invalid-feedback">
+            Por favor ingresá un Estado Válido.
+          </div>
+        </div>
+
+        <div class="form-group pt-2">
+          <label for="tamaño_empresa" class="form-label">Tamaño Empresa</label>
+          <input type="text" class="form-control" id="tamaño_empresa">
+          <div class="invalid-feedback">
+            Por favor ingresá un valor válido.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<seccion class="container vh-100 d-flex mt-3 justify-content-center">
+
+
+
+  <div>
+    <h5>Buscar Datos</h5>
+    <div>
+
+      <div class="mb-3">
+        <input type="text" class="form-control" id="buscar-input" placeholder="buscando...">
+      </div>
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Razón Social</th>
+            <th scope="col">Expediente</th>
+            <th scope="col">Tipo de Trámite</th>
+            <th scope="col">Estado</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody id="searchResults">
+
+        </tbody>
+      </table>
+
+
+      <template id="rowTemplate">
+        <tr class="result-box">
+          <th class="custID" scope="row"></th>
+          <td class="razon-social"></td>
+          <td class="tipo-tramite"></td>
+          <td class="expediente"></td>
+          <td><button type="button" class="btn btn-outline-dark edit-button">Editar</button></td>
+          <td>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-danger delete-button d-none">Confirmar</button>
+              <button type="button" class="btn btn-outline-dark before-delete-button" data-button-state="eliminar">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      </template>
+
+
+      </section>
+
+      <!-- </section> -->

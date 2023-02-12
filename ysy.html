@@ -1,0 +1,191 @@
+<script>
+
+function SetDataForSearch() {
+  google.script.run.withSuccessHandler(function (dataReturned) {
+    data = dataReturned.slice();
+  }).getDataForSearch();
+
+}
+
+function Search() {
+  var buscar = document.getElementById("buscar-input").value.toString().toLowerCase();
+  var searchWords = buscar.split(/\s+/);
+  var searchColumn = [1, 2]
+  // and or
+
+  var resultsArrays = buscar === "" ? [] : data.filter(function (r) {
+
+    return searchWords.every(function (word) {
+      return searchColumn.some(function (colIndex) {
+        return r[colIndex].toString().toLowerCase().indexOf(word) !== -1;
+      });
+    });
+  });
+
+  var searchResultsBox = document.getElementById("searchResults");
+  var templateBox = document.getElementById("rowTemplate");
+  var template = templateBox.content;
+
+  searchResultsBox.innerHTML = "";
+
+  resultsArrays.forEach(function (r) {
+
+
+    var tr = template.cloneNode(true);
+    var custIDColumn = tr.querySelector(".custID");
+    var razonSocialColumn = tr.querySelector(".razon-social");
+    var tipoTramiteColumn = tr.querySelector(".tipo-tramite");
+    var expedienteColumn = tr.querySelector(".expediente");
+    var deleteButton = tr.querySelector(".delete-button");
+    var editButton = tr.querySelector(".edit-button");
+
+    custIDColumn.textContent = r[0];
+    deleteButton.dataset.empresaId = r[0];
+    editButton.dataset.empresaId = r[0];
+    razonSocialColumn.textContent = r[1];
+    tipoTramiteColumn.textContent = r[2];
+    expedienteColumn.textContent = r[3];
+
+
+    searchResultsBox.appendChild(tr);
+  });
+}
+
+function DeleteEmpresa(e) {
+  var razonID = e.target.dataset.empresaId;
+  google.script.run.withSuccessHandler(function () {
+    e.target.closest(".result-box").remove();
+    var ids = data.map(function (r) {
+      return r[0].toString().toLowerCase()
+    });
+    var index = ids.indexOf(razonID.toString().toLowerCase());
+    data.splice(index, 1);
+  }).deleteById(razonID);
+}
+
+function AfterEditViewLoads(params) {
+
+  document.getElementById("empresa-id").value = params.razonID;
+  google.script.run.withSuccessHandler(function (empresaInfo) {
+    document.getElementById("razon-social").value = empresaInfo.razonSocial;
+    document.getElementById("expediente").value = empresaInfo.expediente;
+    document.getElementById("tipo-tramite").value = empresaInfo.tipoDeTramite;
+
+  }).getEmpresaById(params.razonID);
+}
+
+function EditarEmpresa() {
+  var empresaInfo = {};
+  empresaInfo.razonSocial = document.getElementById("razon-social").value;
+  empresaInfo.expediente = document.getElementById("expediente").value;
+  empresaInfo.tipoDeTramite = document.getElementById("tipo-tramite").value;
+
+  var id = document.getElementById("empresa-id").value;
+
+  google.script.run.withSuccessHandler(function (res) {
+    document.getElementById("mensaje-guardar").classList.remove("invisible");
+    setTimeout(function () {
+      document.getElementById("mensaje-guardar").classList.add("invisible");
+    }, 2000);
+  }).editEmpresaById(id, empresaInfo);
+}
+
+function AddEmpresa() {
+  var empresaInfo = {};
+  empresaInfo.razonSocial = document.getElementById("razon-social").value;
+  empresaInfo.tipoDeTramite = document.getElementById("tipo-tramite").value;
+  empresaInfo.expediente = document.getElementById("expediente").value;
+
+  google.script.run.withSuccessHandler(function () {
+    document.getElementById("razon-social").value = "";
+    document.getElementById("expediente").value = "";
+    document.getElementById("tipo-tramite").value = "";
+    document.getElementById("save-success-message").classList.remove("invisible");
+    setTimeout(function () {
+      document.getElementById("save-success-message").classList.add("invisible");
+    }, 2000);
+
+  }).addEmpresa(empresaInfo);
+
+}
+
+
+function DisplayConfirmationDelete(e) {
+  if (e.target.dataset.buttonState === "eliminar") {
+    e.target.previousElementSibling.classList.remove("d-none");
+    e.target.textContent = "Cancelar";
+    e.target.dataset.buttonState = "cancelar"
+  } else {
+    e.target.previousElementSibling.classList.add("d-none");
+    e.target.textContent = "Eliminar";
+    e.target.dataset.buttonState = "eliminar"
+  }
+}
+
+function LoadBuscarView() {
+  loadView({ func: "loadBuscarView", callback: SetDataForSearch });
+}
+
+function LoadDatosView() {
+  loadView({ func: "loadAddEmpresaView" });
+
+}
+
+function LoadEditView(e) {
+  loadView({ func: "loadEditEmpresaView", callback: AfterEditViewLoads, params: { razonID: e.target.dataset.empresaId } });
+}
+
+/* function activeTabChange(e) {
+
+  var navLinks = document.querySelectorAll(".main-nav .nav-link");
+  navLinks.forEach(function (linkEl) {
+    linkEl.classList.remove("active");
+  });
+
+  e.target.classList.add("active");
+
+} */
+
+document.getElementById("about").addEventListener("click", LoadBuscarView);
+document.getElementById("agregar-datos").addEventListener("click", LoadDatosView); 
+
+function inputEventHandler(e) {
+  if (e.target.matches("#buscar-input")) {
+    Search();
+  }
+}
+
+function clickEventHandler(e) {
+  if (e.target.matches(".delete-button")) {
+    DeleteEmpresa(e);
+  }
+
+  if (e.target.matches(".before-delete-button")) {
+    DisplayConfirmationDelete(e);
+  }
+
+  if (e.target.matches(".edit-button")) {
+    LoadEditView(e);
+  }
+
+  if (e.target.matches("#guardar-cambios")) {
+    EditarEmpresa();
+  }
+
+  if (e.target.matches("#cancelar-cambios")) {
+    LoadBuscarView();
+  }
+
+  if (e.target.matches("#add-empresa-button")) {
+    AddEmpresa();
+  }
+
+}
+
+/* function navClickEventHandler(e) {
+  if (e.target.matches(".nav-link")) {
+    activeTabChange(e);
+  }
+} */
+
+</script>

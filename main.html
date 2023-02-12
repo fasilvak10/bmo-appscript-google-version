@@ -9,50 +9,15 @@
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
   <!--CSS styles-->
-
-  <style>
-    body {
-      background-color: #A9E2F3;
-      color: whitesmoke;
-    }
-  </style>
-
-
-
+  <?!= include('css'); ?>
 
 </head>
 
 <body>
 
   <!--navigation web - navabar! -->
+  <?!= include('navs'); ?>
 
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark" id="header-navbar">
-    
-    <div class="container">
-      <a class="navbar-brand nav-link" href="#" id="main2"> <img src="https://img.icons8.com/color/48/null/gunter.png" alt="Logo"
-          class="d-inline-block align-text-center"/> bmo
-        <i>webside</i></a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#" id="main2">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" id="about">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" id="contact">Contact</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
 
   <!--header or main content! -->
   <main class="main-content" id="main-content">
@@ -61,56 +26,42 @@
       <div class="d-flex flex-column justify-content-center align-items-center">
         <img src="https://img.icons8.com/color/144/null/bmo.png" alt="" class="w-200">
         <h3 class="display-1 my-3 text-uppercase fw-bold">bmo</h3>
-      
-
-      <form>
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-          <div id="emailHelp" class="form-text-black"><i>We'll never share your email with anyone else. </i></div>
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-dark">Submit</button>
-      </form>
-    </div>
+      </div>
 
     </header>
-    <!-- <input type="text" class="form-control" id="username" placeholder="name-example45">
-      <a class="btn btn-dark mt-2" id="btn-bmo"><img class="w-25" src="https://img.icons8.com/color/48/null/bmo.png" />
-        about</a> -->
-
 
   </main>
 
 
   <!--footer! -->
-
-  <footer class="bg-dark text-center p-3">
-    <p class="h5">Aplicación desarrollada por grupo <b> Orla-Dev</b> <i>form</i> Varela City @america</p>
-  </footer>
+  <?!= include('footer'); ?>
 
 
   <!--Aqui Comienza el script - integred whit bootstrap javascrip -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
-    </script>
+  </script>
 
 
   <!--continued script - own script - function -->
 
-
+  
 
   <script>
-    document.getElementById("header-navbar").addEventListener("click", navbarClick);
+    
+    var data;
+    
+    function loadView(options){
+        var id = typeof options.id === "undefined" ? "main-content" : options.id;
+        var cb = typeof options.callback === "undefined" ? function(){} : options.callback;
 
+         google.script.run.withSuccessHandler(function(html){
+          document.getElementById(id).innerHTML = html;
+           typeof options.params === "undefined" ? cb() : cb(options.params);
+        })[options.func]();
+    } 
+    
     function navbarClick(e) {
       if (e.target.matches('.nav-link')) {
         //console.log(e.target.id)
@@ -134,8 +85,13 @@
       }).obtenerContenidoHTML(page);
     }
 
+    
+    document.getElementById("header-navbar").addEventListener("click", navbarClick);
+    
 
   </script>
+
+  <?!= include('ysy'); ?>
 
 
 </body>

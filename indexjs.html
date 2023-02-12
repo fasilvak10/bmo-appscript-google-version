@@ -1,0 +1,59 @@
+<script>
+
+ function enviarFormulario(form) {
+    event.preventDefault();
+    const button = document.getElementById("btn-summit");
+    button.disable = true;
+
+    google.script.run
+      .withSuccessHandler(accessmain)
+      .withFailureHandler(showError)
+      .verificarPassword(form);
+  }
+
+  function accessmain(user) {
+    console.log(user);
+
+     var loginPage = document.getElementById("login");
+    login.hidden = true;
+
+    const pageError = document.getElementById("onError");
+
+    const page2 = document.getElementById("pagina2");
+    pagina2.hidden = false;
+
+    const title = "<h2>Bienvenid@: " + user.name + "</h2> </br>";
+    const output = title + crearTabla(user);
+
+    page2.innerHTML = output; 
+  }
+
+  function crearTabla(user) {
+    let table = '<table class="table"><thead class="table-secondary"><tr>';
+    for (var column = 0; column < user.header.lenght; column++) {
+      table += "<th>" + user.headers[column] + "</th>";
+    }
+
+    table += "</tr></thead><tr>";
+
+    for (var column2 = 0; column2 < user.ventas.lenght; column2) {
+      table += "<td>" + user.sales[column2] + "</td>";
+    }
+
+    table += "</tr></table>";
+
+    return table;
+  }
+
+  function showError(error) {
+    console.log(error);
+    var button = document.getElementById("btn-summit");
+    button.disable = false;
+
+    var div = document.getElementById("onError");
+    div.hidden = false;
+
+    div.innerHTML = '<font color = "red">' + error + "</font>";
+  } 
+  
+</script>
